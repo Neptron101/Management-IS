@@ -128,6 +128,9 @@ public class Main extends javax.swing.JFrame {
      
                 ((DefaultTableModel) table.getModel()).insertRow(rs.getRow() - 1, row2);
             }
+            if (table.getRowCount() <= 0) {
+                JOptionPane.showMessageDialog(rootPane, "Please make sure your spelling is correct and try again.", "Search did not return results", JOptionPane.ERROR_MESSAGE);
+            }
             rs.close();
             stmt.close();
             con.close();
@@ -187,9 +190,16 @@ public class Main extends javax.swing.JFrame {
                 "ID", "First Name", "Last Name"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, true, false
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -213,9 +223,16 @@ public class Main extends javax.swing.JFrame {
                 "ID", "Name", "Description"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, true, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -297,13 +314,16 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void SearchEmpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchEmpActionPerformed
-        //SearchResult(jTable1, "Select * from sql12175092.Employee where LastName OR FirstName OR ID = '" + txtSearchEmp.getText() + "'");
-        //SearchResult(jTable1, "Select * from sql12175092.Employee where Contains(FirstName, '" + txtSearchEmp.getText() + "') or Contains(LastName, '" + txtSearchEmp.getText() + "' or Contains(ID, '" + txtSearchEmp.getText() + "'");
+        if ("".equals(txtSearchEmp.getText())) {
+            JOptionPane.showMessageDialog(rootPane, "Please enter an employee id or name and try again.", "No data entered", JOptionPane.ERROR_MESSAGE);
+        }
         SearchResult(jTable1, "Select * from sql12175092.Employee where LastName like '%" + txtSearchEmp.getText() + "%' OR FirstName like '%" + txtSearchEmp.getText() + "%' OR ID like '%" + txtSearchEmp.getText() + "%'");
     }//GEN-LAST:event_SearchEmpActionPerformed
 
     private void SearchProjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchProjActionPerformed
-                //SearchResult(jTable2, "Select * from sql12175092.Projects where Name OR ID = '" + txtSearchProj.getText() + "'");
+        if ("".equals(txtSearchProj.getText())) {
+            JOptionPane.showMessageDialog(rootPane, "Please enter a project id or name and try again.", "No data entered", JOptionPane.ERROR_MESSAGE);
+        }
         SearchResult(jTable2, "Select * from sql12175092.Projects where Name like '%" + txtSearchProj.getText() + "%' OR ID like '%" + txtSearchProj.getText() + "%'");
     }//GEN-LAST:event_SearchProjActionPerformed
 
